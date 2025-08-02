@@ -88,7 +88,7 @@ python app.py
 ## 📸 Screenshot
 
 ```markdown
-![App Preview](preview.png)
+[Preview](https://postimg.cc/MMndpkLn)
 ```
 
 ---
