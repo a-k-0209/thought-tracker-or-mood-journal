@@ -87,9 +87,8 @@ python app.py
 
 ## 📸 Screenshot
 
-```markdown
-[![preview-png.png](https://i.postimg.cc/ydP5nsXy/preview-png.png)](https://postimg.cc/MMndpkLn)
-```
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/b6beb9fe-9870-4661-a998-8cbf04c97855" />
+
 
 ---
 
