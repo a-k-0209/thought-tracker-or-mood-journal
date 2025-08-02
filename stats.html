@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistics - Thought Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="logo">
+                    <i class="fas fa-chart-bar"></i>
+                    Statistics
+                </h1>
+                <p class="subtitle">Your thought tracking insights</p>
+            </div>
+            <div class="header-actions">
+                <a href="/" class="btn btn-primary">
+                    <i class="fas fa-arrow-left"></i> Back to Thoughts
+                </a>
+            </div>
+        </header>
+
+        <!-- Statistics Overview -->
+        <section class="stats-overview">
+            <div class="stats-grid">
+                <div class="stat-card large">
+                    <div class="stat-icon">
+                        <i class="fas fa-sticky-note"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h2>{{ stats.total_entries }}</h2>
+                        <p>Total Thoughts</p>
+                    </div>
+                </div>
+                <div class="stat-card large">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-week"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h2>{{ stats.recent_entries }}</h2>
+                        <p>This Week</p>
+                    </div>
+                </div>
+                <div class="stat-card large">
+                    <div class="stat-icon">
+                        <i class="fas fa-tags"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h2>{{ stats.tags_count|length }}</h2>
+                        <p>Categories</p>
+                    </div>
+                </div>
+                <div class="stat-card large">
+                    <div class="stat-icon">
+                        <i class="fas fa-smile"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h2>{{ stats.mood_distribution|length }}</h2>
+                        <p>Moods Tracked</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Detailed Statistics -->
+        <section class="detailed-stats">
+            <div class="stats-container">
+                <!-- Tag Distribution -->
+                {% if stats.tags_count %}
+                <div class="stat-section">
+                    <h3>Most Used Categories</h3>
+                    <div class="tag-stats">
+                        {% for tag, count in stats.tags_count.most_common(10) %}
+                        <div class="tag-stat-item">
+                            <span class="tag-name">{{ tag }}</span>
+                            <div class="tag-bar">
+                                <div class="tag-fill" style="width: {{ (count / stats.total_entries * 100) }}%"></div>
+                            </div>
+                            <span class="tag-count">{{ count }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Mood Distribution -->
+                {% if stats.mood_distribution %}
+                <div class="stat-section">
+                    <h3>Mood Distribution</h3>
+                    <div class="mood-stats">
+                        {% for mood, count in stats.mood_distribution.most_common() %}
+                        <div class="mood-stat-item">
+                            <span class="mood-emoji">{{ mood }}</span>
+                            <span class="mood-count">{{ count }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Daily Activity -->
+                {% if stats.daily_activity %}
+                <div class="stat-section">
+                    <h3>Daily Activity</h3>
+                    <div class="activity-chart">
+                        <canvas id="activityChart"></canvas>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+
+        <!-- Insights -->
+        <section class="insights-section">
+            <h3>Insights</h3>
+            <div class="insights-grid">
+                {% if stats.total_entries > 0 %}
+                <div class="insight-card">
+                    <div class="insight-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <div class="insight-content">
+                        <h4>Most Active Category</h4>
+                        {% if stats.tags_count %}
+                        <p>{{ stats.tags_count.most_common(1)[0][0] }} with {{ stats.tags_count.most_common(1)[0][1] }} thoughts</p>
+                        {% else %}
+                        <p>No categories yet</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <div class="insight-content">
+                        <h4>Most Common Mood</h4>
+                        {% if stats.mood_distribution %}
+                        <p>{{ stats.mood_distribution.most_common(1)[0][0] }} appears {{ stats.mood_distribution.most_common(1)[0][1] }} times</p>
+                        {% else %}
+                        <p>No moods tracked yet</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-icon">
+                        <i class="fas fa-calendar"></i>
+                    </div>
+                    <div class="insight-content">
+                        <h4>Weekly Activity</h4>
+                        <p>{{ stats.recent_entries }} thoughts this week</p>
+                    </div>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="insight-content">
+                        <h4>Average Daily</h4>
+                        {% if stats.daily_activity %}
+                        {% set avg_daily = (stats.total_entries / stats.daily_activity|length) | round(1) %}
+                        <p>{{ avg_daily }} thoughts per day</p>
+                        {% else %}
+                        <p>No daily data yet</p>
+                        {% endif %}
+                    </div>
+                </div>
+                {% else %}
+                <div class="empty-insights">
+                    <div class="empty-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h4>No Data Yet</h4>
+                    <p>Start adding thoughts to see your statistics!</p>
+                    <a href="/" class="btn btn-primary">Add Your First Thought</a>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Activity Chart
+        {% if stats.daily_activity %}
+        const ctx = document.getElementById('activityChart').getContext('2d');
+        const activityData = {{ stats.daily_activity | tojson }};
+        
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: Object.keys(activityData),
+                datasets: [{
+                    label: 'Thoughts per Day',
+                    data: Object.values(activityData),
+                    borderColor: '#4fd1c7',
+                    backgroundColor: 'rgba(79, 209, 199, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+        {% endif %}
+    </script>
+</body>
+</html> 

@@ -1,0 +1,197 @@
+[
+  {
+    "id": 1,
+    "text": "Need to finish the project presentation by tomorrow. Feeling a bit stressed about the deadline but excited to share our progress!",
+    "tags": [
+      "Work",
+      "Urgent",
+      "High Priority",
+      "Time-sensitive"
+    ],
+    "mood": "😰",
+    "timestamp": "2024-02-08 14:30",
+    "likes": 2
+  },
+  {
+    "id": 2,
+    "text": "Great idea for a new app feature - could add a mood tracking component to help users understand their emotional patterns over time.",
+    "tags": [
+      "Idea",
+      "Tech",
+      "Personal Growth"
+    ],
+    "mood": "🎉",
+    "timestamp": "2024-02-08 16:45",
+    "likes": 5
+  },
+  {
+    "id": 3,
+    "text": "Remember to call mom tomorrow for her birthday. Need to buy a gift and make sure I don't forget!",
+    "tags": [
+      "Personal",
+      "Reminder",
+      "Shopping"
+    ],
+    "mood": "❤️",
+    "timestamp": "2024-02-08 18:20",
+    "likes": 3
+  },
+  {
+    "id": 4,
+    "text": "Should start learning Python for data analysis. Heard it's really useful for work projects and personal growth.",
+    "tags": [
+      "Personal Growth",
+      "Tech",
+      "Work"
+    ],
+    "mood": "😊",
+    "timestamp": "2024-02-08 20:15",
+    "likes": 1
+  },
+  {
+    "id": 5,
+    "text": "Need to schedule a doctor's appointment for the annual checkup. Health is important!",
+    "tags": [
+      "Health",
+      "Reminder"
+    ],
+    "mood": "😕",
+    "timestamp": "2024-02-08 22:00",
+    "likes": 0
+  },
+  {
+    "id": 6,
+    "text": "Amazing book recommendation from Sarah - 'Atomic Habits'. Need to order it online and start reading this weekend.",
+    "tags": [
+      "Personal Growth",
+      "Shopping",
+      "Personal"
+    ],
+    "mood": "🤩",
+    "timestamp": "2024-02-09 09:30",
+    "likes": 4
+  },
+  {
+    "id": 7,
+    "text": "Meeting with the client went really well today! They loved our proposal and we got the green light to proceed.",
+    "tags": [
+      "Work",
+      "Personal"
+    ],
+    "mood": "😎",
+    "timestamp": "2024-02-09 11:45",
+    "likes": 6
+  },
+  {
+    "id": 8,
+    "text": "Need to pay the electricity bill by the end of the week. Should set up automatic payments to avoid late fees.",
+    "tags": [
+      "Finance",
+      "Reminder",
+      "Urgent"
+    ],
+    "mood": "😰",
+    "timestamp": "2024-02-09 14:20",
+    "likes": 1
+  },
+  {
+    "id": 9,
+    "text": "Creative inspiration struck! New design concept for the website - minimalist with bold typography and lots of white space.",
+    "tags": [
+      "Idea",
+      "Work",
+      "Creative"
+    ],
+    "mood": "🎉",
+    "timestamp": "2024-02-09 16:00",
+    "likes": 7
+  },
+  {
+    "id": 10,
+    "text": "Time to clean the house this weekend. Need to do laundry, vacuum, and organize the workspace.",
+    "tags": [
+      "Home",
+      "To-Do"
+    ],
+    "mood": "😴",
+    "timestamp": "2024-02-09 18:30",
+    "likes": 2
+  },
+  {
+    "id": 11,
+    "text": "Should start working on my fitness goals. Maybe join a gym or try home workouts. Need to research the best options.",
+    "tags": [
+      "Personal",
+      "Health",
+      "Personal Growth"
+    ],
+    "mood": "😊",
+    "timestamp": "2024-02-09 20:15",
+    "likes": 3
+  },
+  {
+    "id": 12,
+    "text": "Emergency meeting called for tomorrow morning. Something urgent came up with the project. Need to prepare some materials.",
+    "tags": [
+      "Work",
+      "Urgent",
+      "High Priority",
+      "Time-sensitive"
+    ],
+    "mood": "😰",
+    "timestamp": "2024-02-09 21:00",
+    "likes": 0
+  },
+  {
+    "id": 13,
+    "text": "Love the new coffee shop downtown! Great atmosphere for working and the barista remembered my order. Small things that make life better.",
+    "tags": [
+      "Personal"
+    ],
+    "mood": "❤️",
+    "timestamp": "2024-02-10 10:30",
+    "likes": 8
+  },
+  {
+    "id": 14,
+    "text": "Need to update my resume and start looking for new opportunities. Current job is getting repetitive and I want to grow more.",
+    "tags": [
+      "Work",
+      "Personal Growth"
+    ],
+    "mood": "😕",
+    "timestamp": "2024-02-10 12:45",
+    "likes": 2
+  },
+  {
+    "id": 15,
+    "text": "Amazing sunset tonight! Nature always has a way of putting things in perspective. Grateful for these moments.",
+    "tags": [
+      "Personal"
+    ],
+    "mood": "😊",
+    "timestamp": "2024-02-10 19:20",
+    "likes": 5
+  },
+  {
+    "id": 16,
+    "text": "I should do the course on hugging face, its about AI agents",
+    "tags": [
+      "Personal Growth"
+    ],
+    "mood": null,
+    "timestamp": "2025-08-02 18:05",
+    "likes": 1
+  },
+  {
+    "id": 17,
+    "text": "I have to buy another book of David Baldacci, King and Maxwell, but it went out of stock",
+    "tags": [
+      "Personal Growth",
+      "Shopping"
+    ],
+    "mood": null,
+    "timestamp": "2025-08-02 18:37",
+    "likes": 0
+  }
+]

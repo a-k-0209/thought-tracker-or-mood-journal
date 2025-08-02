@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thought Tracker - Your Personal Mind Journal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="logo">
+                    <i class="fas fa-brain"></i>
+                    Thought Tracker
+                </h1>
+                <p class="subtitle">Capture your thoughts, ideas, and memories</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="loadRandomQuote()">
+                    <i class="fas fa-quote-left"></i> Daily Quote
+                </button>
+                <a href="/stats" class="btn btn-primary">
+                    <i class="fas fa-chart-bar"></i> Statistics
+                </a>
+            </div>
+        </header>
+
+        <!-- Quote Display -->
+        <div id="quote-display" class="quote-display hidden">
+            <div class="quote-content">
+                <i class="fas fa-quote-left quote-icon"></i>
+                <p id="quote-text"></p>
+                <button class="quote-close" onclick="hideQuote()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Input Section -->
+        <section class="input-section">
+            <div class="input-container">
+                <form method="POST" class="thought-form">
+                    <div class="input-group">
+                        <textarea 
+                            name="thought" 
+                            placeholder="What's on your mind? Share your thoughts, ideas, tasks, or anything you want to remember..."
+                            class="thought-input"
+                            required
+                        ></textarea>
+                        <button type="submit" class="submit-btn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Filters Section -->
+        <section class="filters-section">
+            <div class="filters-container">
+                <form method="GET" class="filters-form">
+                    <div class="filter-group">
+                        <input 
+                            type="text" 
+                            name="search" 
+                            placeholder="Search thoughts..."
+                            value="{{ search_query }}"
+                            class="filter-input"
+                        >
+                    </div>
+                    <div class="filter-group">
+                        <select name="tag" class="filter-select">
+                            <option value="">All Tags</option>
+                            {% for tag in all_tags %}
+                            <option value="{{ tag }}" {% if tag_filter == tag %}selected{% endif %}>
+                                {{ tag }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <select name="mood" class="filter-select">
+                            <option value="">All Moods</option>
+                            {% for mood in all_moods %}
+                            <option value="{{ mood }}" {% if mood_filter == mood %}selected{% endif %}>
+                                {{ mood }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-filter">
+                        <i class="fas fa-filter"></i> Filter
+                    </button>
+                    <a href="/" class="btn btn-clear">
+                        <i class="fas fa-times"></i> Clear
+                    </a>
+                </form>
+            </div>
+        </section>
+
+        <!-- Statistics Summary -->
+        {% if stats %}
+        <section class="stats-summary">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-sticky-note"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>{{ stats.total_entries }}</h3>
+                        <p>Total Thoughts</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-week"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>{{ stats.recent_entries }}</h3>
+                        <p>This Week</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-tags"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>{{ stats.tags_count|length }}</h3>
+                        <p>Categories</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-smile"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>{{ stats.mood_distribution|length }}</h3>
+                        <p>Moods Tracked</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        {% endif %}
+
+        <!-- Thoughts Display -->
+        <section class="thoughts-section">
+            {% if grouped %}
+                <div class="categories-grid">
+                    {% for tag, entries in grouped.items() %}
+                        <div class="category-card" onclick="openCategoryDetail('{{ tag }}', {{ entries|tojson }})">
+                            <div class="category-header">
+                                <div class="category-icon">
+                                    {% if tag == "Work" %}
+                                        <i class="fas fa-briefcase"></i>
+                                    {% elif tag == "Personal Growth" %}
+                                        <i class="fas fa-seedling"></i>
+                                    {% elif tag == "Idea" %}
+                                        <i class="fas fa-lightbulb"></i>
+                                    {% elif tag == "To-Do" %}
+                                        <i class="fas fa-tasks"></i>
+                                    {% elif tag == "Urgent" %}
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                    {% elif tag == "Personal" %}
+                                        <i class="fas fa-user"></i>
+                                    {% elif tag == "Shopping" %}
+                                        <i class="fas fa-shopping-cart"></i>
+                                    {% elif tag == "Reminder" %}
+                                        <i class="fas fa-bell"></i>
+                                    {% elif tag == "Health" %}
+                                        <i class="fas fa-heartbeat"></i>
+                                    {% elif tag == "Finance" %}
+                                        <i class="fas fa-dollar-sign"></i>
+                                    {% elif tag == "Tech" %}
+                                        <i class="fas fa-laptop-code"></i>
+                                    {% elif tag == "Home" %}
+                                        <i class="fas fa-home"></i>
+                                    {% else %}
+                                        <i class="fas fa-tag"></i>
+                                    {% endif %}
+                                </div>
+                                <div class="category-info">
+                                    <h3 class="category-title">{{ tag }}</h3>
+                                    <p class="category-count">{{ entries|length }} thought{{ 's' if entries|length != 1 else '' }}</p>
+                                </div>
+                            </div>
+                            {% if entries %}
+                                <div class="category-preview">
+                                    <p class="preview-text">{{ entries[0].text[:100] }}{% if entries[0].text|length > 100 %}...{% endif %}</p>
+                                    <div class="preview-meta">
+                                        <span class="preview-mood">{{ entries[0].mood }}</span>
+                                        <span class="preview-time">{{ entries[0].timestamp }}</span>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3>No thoughts yet</h3>
+                    <p>Start by sharing your first thought above!</p>
+                </div>
+            {% endif %}
+        </section>
+
+        <!-- Category Detail Modal -->
+        <div id="categoryModal" class="modal hidden">
+            <div class="category-detail">
+                <div class="category-detail-header">
+                    <div class="category-detail-icon" id="categoryDetailIcon">
+                        <i class="fas fa-tag"></i>
+                    </div>
+                    <div class="category-detail-info">
+                        <h2 id="categoryDetailTitle">Category</h2>
+                        <p id="categoryDetailCount">0 thoughts</p>
+                    </div>
+                    <button class="modal-close" onclick="closeCategoryDetail()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="category-entries" id="categoryEntries">
+                    <!-- Entries will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="edit-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Thought</h3>
+                <button class="modal-close" onclick="closeEditModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="edit-form" method="POST">
+                <textarea 
+                    id="edit-textarea" 
+                    name="text" 
+                    class="edit-textarea"
+                    placeholder="Edit your thought..."
+                    required
+                ></textarea>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Delete Thought</h3>
+                <button class="modal-close" onclick="closeDeleteModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this thought? This action cannot be undone.</p>
+            </div>
+            <form id="delete-form" method="POST">
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html> 
